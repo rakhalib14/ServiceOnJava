@@ -20,5 +20,20 @@ public class PointService {
         }
         return null;
     }
+    
+    public List<Point> findAll() {
+        List<Point> points = pointRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
+        return points;
+    }
+    
+    public Point getCurrentActive() {
+        Point point = pointRepository.getLast();
+        if(point != null && point.getActive()) {
+            return point;
+        }
+        return null;
+    }
+
+
 }
 
