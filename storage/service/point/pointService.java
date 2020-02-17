@@ -33,6 +33,28 @@ public class PointService {
         }
         return null;
     }
+    
+    public Point create(Point point) {
+        Point current = getCurrentActive();
+        if(current != null) {
+            close(current);
+        }
+        point.setActive(true);
+        return pointRepository.save(point);
+    }
+    
+    public Point edit(Point point) {
+        Point dbPoint = findById(point.getId());
+        dbPoint.setTitle(point.getTitle());
+        dbPoint.setContent(point.getContent());
+        return pointRepository.save(dbPoint);
+    }
+
+    public Point close(Long id) {
+        Point point = findById(id);
+        return close(point);
+    }
+
 
 
 }
