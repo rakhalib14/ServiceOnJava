@@ -55,7 +55,35 @@ public class PointService {
         return close(point);
     }
 
+    public Point active(Long id) {
+        List<Point> activePoints = pointRepository.findByActive(true);
+        for(Point point: activePoints) {
+            point.setActive(false);
+        }
+        pointRepository.saveAll(activePoints);
 
+        Point point = findById(id);
+        point.setActive(true);
+        return pointRepository.save(point);
+    }
+
+    public Point close(Point point) {
+        point.setActive(false);
+        return pointRepository.save(point);
+    }
+
+    public Point repeat(Long id) {
+        Point point = findById(id);
+        close(point);
+        Point newPoint = new Point();
+        newPoint.setTitle(point.getTitle());
+        newPoint.setContent(point.getContent());
+        return create(newPoint);
+    }
+
+    public void delete(Long id) {
+        pointRepository.deleteById(id);
+    }
 
 }
 
