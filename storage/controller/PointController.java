@@ -23,5 +23,15 @@ public class PointController {
   public ResponseEntity<?> getCurrent() {
         return ResponseEntity.ok(pointService.getCurrentActive());
      }
+    
+  @PostMapping
+    public ResponseEntity<?> create(@RequestBody Point point) {
+        return ResponseEntity.ok(pointService.create(point));
+     }
+
+  @PutMapping
+    public ResponseEntity<?> edit(@RequestBody Point point) {
+        return ResponseEntity.ok(pointService.edit(point));
+     }
 
 }
