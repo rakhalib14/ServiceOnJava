@@ -13,5 +13,15 @@ public class PointController {
     
   @Autowired
     PointService pointService;
+    
+  @GetMapping
+    public ResponseEntity<?> findAll() {
+        return ResponseEntity.ok(pointService.findAll());
+      }
+
+  @GetMapping("/current")
+  public ResponseEntity<?> getCurrent() {
+        return ResponseEntity.ok(pointService.getCurrentActive());
+     }
 
 }
