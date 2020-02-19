@@ -3,7 +3,8 @@ package storage.service.point;
 import storage.entity.point.Point;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import storage.repository.point.PointRepository;
 import java.util.List;
 import java.util.Optional;
@@ -22,9 +23,10 @@ public class PointService {
         return null;
     }
     
-    public List<Point> findAll() {
-        List<Point> points = pointRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
-        return points;
+    public Page<Point> getAllPoints(Pageable pageable)
+    {
+        Page<Point> pagedResult = pointRepository.findAllByOrderByCreateDateDesc(pageable);
+        return pagedResult;
     }
     
     public Point getCurrentActive() {
