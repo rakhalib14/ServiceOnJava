@@ -11,27 +11,47 @@ import org.springframework.stereotype.Controller;
 @RequestMapping("/points")
 public class PointController {
     
-  @Autowired
+    @Autowired
     PointService pointService;
     
-  @GetMapping
+    @GetMapping
     public ResponseEntity<?> findAll() {
         return ResponseEntity.ok(pointService.findAll());
       }
 
-  @GetMapping("/current")
-  public ResponseEntity<?> getCurrent() {
+    @GetMapping("/current")
+    public ResponseEntity<?> getCurrent() {
         return ResponseEntity.ok(pointService.getCurrentActive());
      }
     
-  @PostMapping
+    @PostMapping
     public ResponseEntity<?> create(@RequestBody Point point) {
         return ResponseEntity.ok(pointService.create(point));
      }
 
-  @PutMapping
+    @PutMapping
     public ResponseEntity<?> edit(@RequestBody Point point) {
         return ResponseEntity.ok(pointService.edit(point));
      }
+    @PostMapping("/{id}/active")
+    public ResponseEntity<?> active(@PathVariable Long id) {
+        return ResponseEntity.ok(announcementService.active(id));
+    }
 
+    @PostMapping("/{id}/close")
+    public ResponseEntity<?> close(@PathVariable Long id) {
+        return ResponseEntity.ok(announcementService.close(id));
+    }
+
+    @PostMapping("/{id}/repeat")
+    public ResponseEntity<?> repeat(@PathVariable Long id) {
+        return ResponseEntity.ok(announcementService.repeat(id));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        announcementService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    
 }
