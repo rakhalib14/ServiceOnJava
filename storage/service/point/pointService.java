@@ -7,6 +7,7 @@ import org.springframework.data.domain.Sort;
 import storage.repository.point.PointRepository;
 import java.util.List;
 import java.util.Optional;
+import java.util.Date;
 
 @Service
 public class PointService {
@@ -40,6 +41,7 @@ public class PointService {
             close(current);
         }
         point.setActive(true);
+        point.setCreateDate(new Date());
         return pointRepository.save(point);
     }
     
