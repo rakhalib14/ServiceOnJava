@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import storage.repository.point.PointRepository;
-import java.util.List;
 import java.util.Optional;
 import java.util.Date;
 
@@ -29,19 +28,13 @@ public class PointService {
         return pagedResult;
     }
     
-    public Point getCurrentActive() {
-        Point point = pointRepository.getLast();
-        if(point != null && point.getActive()) {
-            return point;
-        }
-        return null;
+    public Point getActive() {
+        Point point = pointRepository.getCurrent(new Date());
+        return announcement;
+
     }
     
     public Point create(Point point) {
-        Point current = getCurrentActive();
-        if(current != null) {
-            close(current);
-        }
         point.setActive(true);
         point.setCreateDate(new Date());
         return pointRepository.save(point);
@@ -49,39 +42,22 @@ public class PointService {
     
     public Point edit(Point point) {
         Point dbPoint = findById(point.getId());
+        dbPoint.setStartDate(point.getStartDate());
+        dbPoint.setEndDate(point.getEndDate());
         dbPoint.setTitle(point.getTitle());
         dbPoint.setContent(point.getContent());
+        dbPoint.setActive(point.getActive());
         return pointRepository.save(dbPoint);
     }
 
-    public Point close(Long id) {
-        Point point = findById(id);
-        return close(point);
-    }
-
-    public Point active(Long id) {
-        List<Point> activePoints = pointRepository.findByActive(true);
-        for(Point point: activePoints) {
-            point.setActive(false);
-        }
-        pointRepository.saveAll(activePoints);
-
-        Point point = findById(id);
-        point.setActive(true);
-        return pointRepository.save(point);
-    }
-
-    public Point close(Point point) {
-        point.setActive(false);
-        return pointRepository.save(point);
-    }
 
     public Point repeat(Long id) {
         Point point = findById(id);
-        close(point);
         Point newPoint = new Point();
         newPoint.setTitle(point.getTitle());
         newPoint.setContent(point.getContent());
+        newPoint.setStartDate(point.getStartDate());
+        newPoint.setEndDate(point.getEndDate());
         return create(newPoint);
     }
 
